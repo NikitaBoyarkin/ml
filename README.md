@@ -1,5 +1,43 @@
 # ML Fundamentals
 
+> Machine Learning A-Z pipeline in scikit-learn: leakage-free preprocessing (imputer → scaler → one-hot) fit on the train split, **21 tests**, Train (8, 5) / Test (2, 5).
+
+## Navigation
+- 🌐 [Portfolio site](https://nikitaboyarkin.github.io)
+- 🏦 [Flagship case: Volta neobank](https://github.com/NikitaBoyarkin/volta-banking)
+- 🧪 Related: [churn-prediction](https://github.com/NikitaBoyarkin/churn-prediction) · [python](https://github.com/NikitaBoyarkin/python) · [sql-analytics-case-study](https://github.com/NikitaBoyarkin/sql-analytics-case-study)
+
+**On this page:** [Situation](#situation) · [Task](#task) · [Actions](#actions) · [Result](#result) · [What it does](#what-it-does) · [Structure](#structure) · [Run](#run) · [Test](#test) · [Notes](#notes)
+
+## Situation
+
+The ML A-Z course pipeline is easy to get subtly wrong: imputers and encoders
+that see the test set, splits that depend on a random seed, or outdated
+scikit-learn APIs. The point of this project is **the pipeline**, done correctly
+with modern tooling.
+
+## Task
+
+Implement preprocessing the right way — missing-data imputation, categorical
+encoding, a deterministic train/test split, and feature scaling — with no test
+information leaking into the fit.
+
+## Actions
+
+- **Missing data** — mean imputation via `SimpleImputer` (`python/data_preprocessing.py`).
+- **Categorical encoding** — `OneHotEncoder` for features, `LabelEncoder` for the target.
+- **Train/test split** — deterministic 80/20: rows stable-sorted by `(Country, Age)`, every 5th row becomes the test set.
+- **Feature scaling** — `StandardScaler` on numeric columns only.
+- **One `ColumnTransformer`** — `SimpleImputer` → `StandardScaler` for numerics, `OneHotEncoder` for categoricals, fit on the training split only.
+- **Support scripts** — `python/generate_dummy_data.py` (seeded extended datasets) and `python/eda_plots.py` (EDA charts in a unified `dark_background` style).
+
+## Result
+
+- **21 tests** — `tests/` (7 `test_data_preprocessing` + 9 `test_eda_plots` + 5 `test_generate_dummy_data`).
+- **Train (8, 5) / Test (2, 5)** — deterministic 80/20 split, printed by `python/data_preprocessing.py`.
+- **400 / 300 / 500 / 800** — generated rows in `Data_large`, `Salary_Data_large`, `Housing_Data`, `Customer_Churn`.
+- **300 dpi** — EDA charts in `output/`, one figure per dataset plus a combined `dashboard.png` (`python/eda_plots.py`).
+
 Hands-on implementation of the **Machine Learning A-Z** pipeline in Python
 (scikit-learn). Starts with preprocessing (Part 1) — the foundation every later
 section — regression, classification, clustering — builds on.
