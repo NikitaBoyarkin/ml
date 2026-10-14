@@ -1,7 +1,7 @@
 [project]
 name = "ml"
 version = "0.1.0"
-description = "Add your description here"
+description = "Machine learning fundamentals — a leakage-free scikit-learn preprocessing pipeline (impute → scale → one-hot) plus curated EDA plots."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
