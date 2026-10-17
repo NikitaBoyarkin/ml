@@ -7,6 +7,8 @@
 - 🏦 [Flagship case: Volta neobank](https://github.com/NikitaBoyarkin/volta-banking)
 - 🧪 Related: [churn-prediction](https://github.com/NikitaBoyarkin/churn-prediction) · [python](https://github.com/NikitaBoyarkin/python) · [sql-analytics-case-study](https://github.com/NikitaBoyarkin/sql-analytics-case-study)
 
+**▶ [Diagram: Leakage-free sklearn preprocessing pipeline](docs/diagrams/ml.html)** — opens in a browser, no install, no build
+
 **On this page:** [Situation](#situation) · [Task](#task) · [Actions](#actions) · [Result](#result) · [What it does](#what-it-does) · [Structure](#structure) · [Run](#run) · [Test](#test) · [Notes](#notes)
 
 ## Situation
