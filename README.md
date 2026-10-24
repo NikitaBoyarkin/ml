@@ -1,128 +1,129 @@
 # ML Fundamentals
 
-> Machine Learning A-Z pipeline in scikit-learn: leakage-free preprocessing (imputer → scaler → one-hot) fit on the train split, **21 tests**, Train (8, 5) / Test (2, 5).
+> Пайплайн из курса Machine Learning A-Z на scikit-learn: препроцессинг без
+> утечки данных (импутация → масштабирование → one-hot), обученный только на
+> тренировочной части. **21 тест**, Train (8, 5) / Test (2, 5).
 
-## Navigation
-- 🌐 [Portfolio site](https://nikitaboyarkin.github.io)
-- 🏦 [Flagship case: Volta neobank](https://github.com/NikitaBoyarkin/volta-banking)
-- 🧪 Related: [churn-prediction](https://github.com/NikitaBoyarkin/churn-prediction) · [python](https://github.com/NikitaBoyarkin/python) · [sql-analytics-case-study](https://github.com/NikitaBoyarkin/sql-analytics-case-study)
+## Навигация
+- 🌐 [Сайт-портфолио](https://nikitaboyarkin.github.io)
+- 🏦 [Флагманский кейс: необанк Volta](https://github.com/NikitaBoyarkin/volta-banking)
+- 🧪 Рядом: [churn-prediction](https://github.com/NikitaBoyarkin/churn-prediction) · [python](https://github.com/NikitaBoyarkin/python) · [sql-analytics-case-study](https://github.com/NikitaBoyarkin/sql-analytics-case-study)
 
-**▶ [Diagram: Leakage-free sklearn preprocessing pipeline](docs/diagrams/ml.html)** — opens in a browser, no install, no build
+**▶ [Схема: препроцессинг в scikit-learn без утечки данных](docs/diagrams/ml.html)** — открывается в браузере, ничего ставить и собирать не нужно
 
-**On this page:** [Situation](#situation) · [Task](#task) · [Actions](#actions) · [Result](#result) · [What it does](#what-it-does) · [Structure](#structure) · [Run](#run) · [Test](#test) · [Notes](#notes)
+**На этой странице:** [Ситуация](#ситуация) · [Задача](#задача) · [Действия](#действия) · [Результат](#результат) · [Что делает](#что-делает) · [Структура](#структура) · [Запуск](#запуск) · [Тесты](#тесты) · [Заметки](#заметки)
 
-## Situation
+## Ситуация
 
-The ML A-Z course pipeline is easy to get subtly wrong: imputers and encoders
-that see the test set, splits that depend on a random seed, or outdated
-scikit-learn APIs. The point of this project is **the pipeline**, done correctly
-with modern tooling.
+Пайплайн из курса ML A-Z легко испортить незаметно: импутеры и энкодеры
+подглядывают в тестовую выборку, сплит зависит от случайного зерна, а API
+scikit-learn уже устарели. Смысл проекта — **сам пайплайн**, сделанный
+правильно и на современных инструментах.
 
-## Task
+## Задача
 
-Implement preprocessing the right way — missing-data imputation, categorical
-encoding, a deterministic train/test split, and feature scaling — with no test
-information leaking into the fit.
+Собрать препроцессинг как надо: заполнить пропуски, закодировать категории,
+разделить данные детерминированно и отмасштабировать признаки так, чтобы
+информация из теста не попадала в обучение.
 
-## Actions
+## Действия
 
-- **Missing data** — mean imputation via `SimpleImputer` (`python/data_preprocessing.py`).
-- **Categorical encoding** — `OneHotEncoder` for features, `LabelEncoder` for the target.
-- **Train/test split** — deterministic 80/20: rows stable-sorted by `(Country, Age)`, every 5th row becomes the test set.
-- **Feature scaling** — `StandardScaler` on numeric columns only.
-- **One `ColumnTransformer`** — `SimpleImputer` → `StandardScaler` for numerics, `OneHotEncoder` for categoricals, fit on the training split only.
-- **Support scripts** — `python/generate_dummy_data.py` (seeded extended datasets) and `python/eda_plots.py` (EDA charts in a unified `dark_background` style).
+- **Пропуски** — заполнение средним через `SimpleImputer` (`python/data_preprocessing.py`).
+- **Категории** — `OneHotEncoder` для признаков, `LabelEncoder` для целевой переменной.
+- **Сплит** — детерминированные 80/20: строки устойчиво сортируются по `(Country, Age)`, каждая пятая уходит в тест.
+- **Масштабирование** — `StandardScaler` только на числовых столбцах.
+- **Один `ColumnTransformer`** — `SimpleImputer` → `StandardScaler` для чисел, `OneHotEncoder` для категорий, обучение только на тренировочной части.
+- **Вспомогательные скрипты** — `python/generate_dummy_data.py` (расширенные датасеты с зерном) и `python/eda_plots.py` (графики EDA в едином стиле `dark_background`).
 
-## Result
+## Результат
 
-- **21 tests** — `tests/` (7 `test_data_preprocessing` + 9 `test_eda_plots` + 5 `test_generate_dummy_data`).
-- **Train (8, 5) / Test (2, 5)** — deterministic 80/20 split, printed by `python/data_preprocessing.py`.
-- **400 / 300 / 500 / 800** — generated rows in `Data_large`, `Salary_Data_large`, `Housing_Data`, `Customer_Churn`.
-- **300 dpi** — EDA charts in `output/`, one figure per dataset plus a combined `dashboard.png` (`python/eda_plots.py`).
+- **21 тест** — в `tests/` (7 в `test_data_preprocessing` + 9 в `test_eda_plots` + 5 в `test_generate_dummy_data`).
+- **Train (8, 5) / Test (2, 5)** — детерминированный сплит 80/20, который печатает `python/data_preprocessing.py`.
+- **400 / 300 / 500 / 800** — сгенерированных строк в `Data_large`, `Salary_Data_large`, `Housing_Data`, `Customer_Churn`.
+- **300 dpi** — графики EDA в `output/`: по одной фигуре на датасет плюс общий `dashboard.png` (`python/eda_plots.py`).
 
-Hands-on implementation of the **Machine Learning A-Z** pipeline in Python
-(scikit-learn). Starts with preprocessing (Part 1) — the foundation every later
-section — regression, classification, clustering — builds on.
+Практическая реализация пайплайна из курса **Machine Learning A-Z** на Python
+(scikit-learn). Начинается с препроцессинга (часть 1) — фундамента, на котором
+стоят регрессия, классификация и кластеризация.
 
-The point of this project is **the pipeline**, done correctly with modern
-tooling: missing-data imputation, categorical encoding, train/test split and
-feature scaling.
+Смысл проекта — **сам пайплайн**, сделанный правильно на современных
+инструментах: заполнение пропусков, кодирование категорий, разделение на
+train/test и масштабирование признаков.
 
-## What it does
+## Что делает
 
-**`python/data_preprocessing.py`** — preprocessing on `Data.csv`:
+**`python/data_preprocessing.py`** — препроцессинг `Data.csv`:
 
-- **Missing data**: mean imputation via `SimpleImputer`.
-- **Categorical encoding**: `OneHotEncoder` for features, `LabelEncoder` for
-  the target.
-- **Train/test split**: deterministic 80/20 — rows are stable-sorted by
-  `(Country, Age)` and every 5th row becomes the test set (no reliance on a
-  random seed).
-- **Feature scaling**: `StandardScaler` on numeric columns only.
+- **Пропуски**: заполнение средним через `SimpleImputer`.
+- **Категории**: `OneHotEncoder` для признаков, `LabelEncoder` для целевой
+  переменной.
+- **Сплит**: детерминированные 80/20 — строки устойчиво сортируются по
+  `(Country, Age)`, каждая пятая уходит в тест. Случайное зерно не нужно.
+- **Масштабирование**: `StandardScaler` только на числовых столбцах.
 
-Everything is a single `ColumnTransformer` pipeline (`SimpleImputer` →
-`StandardScaler` for numerics, `OneHotEncoder` for categoricals) **fit on the
-training split only**, so no test information leaks into preprocessing.
+Всё собрано в один пайплайн `ColumnTransformer` (`SimpleImputer` →
+`StandardScaler` для чисел, `OneHotEncoder` для категорий) и обучено **только
+на тренировочной части**, поэтому тест не протекает в препроцессинг.
 
-**`python/generate_dummy_data.py`** — deterministic generator (seeded RNG) for
-the extra datasets in `data/`, one per pipeline stage:
+**`python/generate_dummy_data.py`** — детерминированный генератор (RNG с
+зерном) для дополнительных датасетов в `data/`, по одному на этап пайплайна:
 
-| File | Pattern | Purpose |
-|------|---------|---------|
-| `Data_large.csv` | `Data.csv` | 400 rows, extended preprocessing set |
-| `Salary_Data_large.csv` | `Salary_Data.csv` | 300 rows, simple linear regression |
-| `Housing_Data.csv` / `.sql` | `50_Startups.csv` | 500 rows, multiple regression |
-| `Customer_Churn.csv` / `.json` | `Social_Network_Ads.csv` | 800 rows, classification |
+| Файл | Образец | Назначение |
+|------|---------|------------|
+| `Data_large.csv` | `Data.csv` | 400 строк, расширенный набор для препроцессинга |
+| `Salary_Data_large.csv` | `Salary_Data.csv` | 300 строк, простая линейная регрессия |
+| `Housing_Data.csv` / `.sql` | `50_Startups.csv` | 500 строк, множественная регрессия |
+| `Customer_Churn.csv` / `.json` | `Social_Network_Ads.csv` | 800 строк, классификация |
 
-**`python/eda_plots.py`** — EDA charts for every dataset in `output/` (one
-figure per dataset + a combined `dashboard.png`), all in a unified
-`dark_background` style, OO matplotlib (`fig, ax = plt.subplots`), 300 dpi PNG.
+**`python/eda_plots.py`** — графики EDA по каждому датасету в `output/`
+(одна фигура на датасет плюс общий `dashboard.png`). Единый стиль
+`dark_background`, объектный matplotlib (`fig, ax = plt.subplots`), PNG 300 dpi.
 
-## Structure
+## Структура
 
 ```
 ml/
-├── data/              # 6 course datasets + generated large sets
-│   ├── Data.csv              # Part 1 — preprocessing (France/Spain/Germany)
-│   ├── Salary_Data.csv       # Part 2 — simple linear regression
-│   ├── 50_Startups.csv       # Part 2 — multiple linear regression
-│   ├── Position_Salaries.csv # Part 2 — polynomial / SVR / trees
-│   ├── Social_Network_Ads.csv# Part 3 — classification
-│   ├── Mall_Customers.csv    # Part 4 — clustering
+├── data/              # 6 датасетов курса + сгенерированные крупные наборы
+│   ├── Data.csv              # Часть 1 — препроцессинг (France/Spain/Germany)
+│   ├── Salary_Data.csv       # Часть 2 — простая линейная регрессия
+│   ├── 50_Startups.csv       # Часть 2 — множественная линейная регрессия
+│   ├── Position_Salaries.csv # Часть 2 — полином / SVR / деревья
+│   ├── Social_Network_Ads.csv# Часть 3 — классификация
+│   ├── Mall_Customers.csv    # Часть 4 — кластеризация
 │   └── Data_large.csv, Salary_Data_large.csv, Housing_Data.csv,
 │       Housing_Data.sql, Customer_Churn.csv, Customer_Churn.json
 ├── python/           # data_preprocessing.py, generate_dummy_data.py, eda_plots.py
-├── output/           # generated EDA charts (gitignored)
-└── tests/            # pytest smoke tests
+├── output/           # сгенерированные графики EDA (в gitignore)
+└── tests/            # дымовые тесты на pytest
 ```
 
-## Run
+## Запуск
 
 ```bash
 pip install -r requirements.txt
 
-# preprocessing (reads ../data/Data.csv relative to python/)
+# препроцессинг (читает ../data/Data.csv относительно python/)
 cd python
 python3 data_preprocessing.py
 
-# regenerate the synthetic datasets (run from python/)
+# пересобрать синтетические датасеты (запускать из python/)
 python3 generate_dummy_data.py
 
-# render all EDA charts into output/ (run from project root)
+# отрисовать все графики EDA в output/ (из корня проекта)
 python python/eda_plots.py
 ```
 
-## Test
+## Тесты
 
 ```bash
 pip install pytest
 pytest
 ```
 
-## Notes
+## Заметки
 
-- Migrated to modern scikit-learn: `sklearn.model_selection`,
-  `sklearn.impute.SimpleImputer`, `ColumnTransformer` (the course's original
+- Переехали на современный scikit-learn: `sklearn.model_selection`,
+  `sklearn.impute.SimpleImputer`, `ColumnTransformer`. Исходные
   `sklearn.cross_validation` / `Imputer` / `OneHotEncoder(categorical_features=)`
-  are removed in scikit-learn ≥ 0.22).
-- Prints `Train: (8, 5), Test: (2, 5)`.
+  из курса удалены в scikit-learn ≥ 0.22.
+- Печатает `Train: (8, 5), Test: (2, 5)`.
